@@ -6,12 +6,13 @@ explícitos limitam o escopo e evitam tabelas adicionais. Os arquivos são
 lidos da pasta Bronze definida pelo módulo de banco, que resolve o caminho
 relativamente ao próprio código.
 
-Os DataFrames são lidos sem transformação explícita: cabeçalhos e valores
-seguem o comportamento padrão de ``pandas.read_csv``. Cada gravação substitui
-a tabela, tornando reexecuções não cumulativas. A saída usa as contagens
-consultadas pelo módulo de banco. Arquivos ausentes são detectados antes da
-leitura e de qualquer gravação; falhas de cada etapa são informadas e causam
-saída diferente de zero, com fechamento da conexão quando aberta.
+Os cabeçalhos são preservados e todas as colunas são lidas como texto para
+que a Bronze retenha os valores de origem sem inferir tipos. O parser mantém
+seu tratamento padrão de valores ausentes. Cada gravação substitui a tabela,
+tornando reexecuções não cumulativas. A saída usa as contagens consultadas
+pelo módulo de banco. Arquivos ausentes são detectados antes da leitura e de
+qualquer gravação; falhas de cada etapa são informadas e causam saída
+diferente de zero, com fechamento da conexão quando aberta.
 """
 
 import sys
@@ -42,7 +43,7 @@ def main() -> int:
     dataframes: dict[str, pd.DataFrame] = {}
     for nome, _, caminho in caminhos:
         try:
-            dataframes[nome] = pd.read_csv(caminho)
+            dataframes[nome] = pd.read_csv(caminho, dtype="string")
         except (OSError, ValueError) as erro:
             print(f"Erro na etapa de leitura de {nome}: {erro}", file=sys.stderr)
             return 1
