@@ -1,4 +1,4 @@
-season,place,team,points,played,won,draw,loss,goals,goals_taken,goals_diff
+temporada,posicao,time,pontos,jogos_disputados,vitorias,empates,derrotas,gols,gols_sofridos,saldo_de_gols
 2003,1,Cruzeiro,100,46,31,7,8,102,47,55
 2003,2,Santos,87,46,25,12,9,93,60,33
 2003,3,São Paulo,78,46,22,12,12,81,67,14
