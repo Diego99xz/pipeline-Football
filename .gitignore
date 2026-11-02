@@ -192,4 +192,8 @@ pyrightconfig.json
 .history
 .ionide
 
+# DuckDB local database and write-ahead log
+*.duckdb
+*.duckdb.wal
+
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode
