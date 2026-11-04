@@ -1,398 +1,388 @@
-# Football — Pipeline de Dados do Campeonato Brasileiro
+# ⚽ Football — Pipeline de Engenharia de Dados
 
-Projeto de Engenharia de Dados para ingestão, tipagem e análise de dados
-históricos do Campeonato Brasileiro. O fluxo organiza os dados em camadas
-Bronze, Silver e Gold usando DuckDB; consultas SQL materializam os resultados
-analíticos consumidos por um dashboard interativo em Streamlit e Plotly.
+**Análise histórica do Campeonato Brasileiro utilizando Python, DuckDB, SQL e Streamlit.**
 
-O repositório também contém testes automatizados com pytest e documentação
-técnica gerada localmente pelo MkDocs. O pipeline é executado por etapas
-independentes; não há orquestrador central nem atualização automática.
+[![Python](https://img.shields.io/badge/Python-3.13+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![DuckDB](https://img.shields.io/badge/DuckDB-Analytics-FFF000?logo=duckdb&logoColor=black)](https://duckdb.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Plotly](https://img.shields.io/badge/Plotly-Visualização-3F4F75?logo=plotly&logoColor=white)](https://plotly.com/python/)
+[![pytest](https://img.shields.io/badge/Tests-pytest-0A9EDC?logo=pytest&logoColor=white)](https://docs.pytest.org/)
 
-**Exemplo final — dashboard estático:** [acesse a visualização no GitHub
-Pages](https://diego99xz.github.io/pipeline-Football/index.html). A página
-apresenta somente dados de amostra para demonstração; não está conectada ao
-DuckDB nem ao pipeline.
+## Sobre o projeto
 
-## Índice
+O **Football** é um projeto de Engenharia de Dados desenvolvido para explorar o histórico do Campeonato Brasileiro por meio de um pipeline modular de dados.
 
-- [Objetivos e estado atual](#objetivos-e-estado-atual)
-- [Dados de origem](#dados-de-origem)
-- [Tecnologias](#tecnologias)
-- [Arquitetura](#arquitetura)
-- [Estrutura do repositório](#estrutura-do-repositório)
-- [Instalação](#instalação)
-- [Executar o pipeline](#executar-o-pipeline)
-- [Consultas Gold](#consultas-gold)
-- [Dashboard](#dashboard)
-- [Testes e qualidade](#testes-e-qualidade)
-- [Documentação MkDocs](#documentação-mkdocs)
-- [Git, segurança e CI](#git-segurança-e-ci)
-- [Limitações e próximos passos](#limitações-e-próximos-passos)
-- [Referências](#referências)
+A solução utiliza a arquitetura Medallion, organizando o processamento em três camadas:
 
-## Objetivos e estado atual
+- **Bronze:** ingestão dos arquivos CSV originais.
+- **Silver:** transformação e tipagem dos dados.
+- **Gold:** consultas SQL que produzem tabelas analíticas para consumo.
 
-O projeto implementa:
+Os resultados são armazenados localmente no DuckDB e disponibilizados em um dashboard interativo desenvolvido com Streamlit e Plotly.
 
-- pipeline modular de ingestão, transformação e materialização analítica;
-- organização Bronze/Silver/Gold em um banco DuckDB local;
-- consultas SQL para campanhas, campeões, clubes e desempenho regional;
-- dashboard Streamlit com gráficos Plotly e filtros por temporada onde
-  aplicável;
-- testes com dados inventados e bancos DuckDB temporários;
-- documentação técnica em Markdown e configuração MkDocs.
+O projeto também contempla testes automatizados com pytest, análise estática com Ruff e documentação técnica com MkDocs.
 
-Não há download automático dos dados, execução agendada, integração contínua
-configurada ou publicação do site de documentação. O fluxo de atualização dos
-dados é iniciado manualmente por comandos.
+> O pipeline é executado manualmente por etapas independentes. Não há orquestrador ou atualização automática configurados.
 
-## Dados de origem
+## Demonstração
 
-A fonte de referência informada para o conjunto é o
-[Kaggle — Brasileirão Série A 2006–2022](https://www.kaggle.com/datasets/lucasyukioimafuko/brasileirao-serie-a-2006-2022).
-O repositório contém os arquivos `bronze/brasileirao.csv` e
-`bronze/times.csv`; a ingestão espera esses nomes e os cabeçalhos abaixo:
+**Dashboard estático:** [Visualizar no GitHub Pages](https://diego99xz.github.io/pipeline-Football/index.html)
 
-| Arquivo | Colunas utilizadas |
-|---|---|
-| `brasileirao.csv` | `temporada`, `posicao`, `time`, `pontos`, `jogos_disputados`, `vitorias`, `empates`, `derrotas`, `gols`, `gols_sofridos`, `saldo_de_gols` |
-| `times.csv` | `time`, `sigla`, `nome_completo`, `ano_fundacao`, `estadio`, `cidade`, `estado`, `regiao` |
+A demonstração publicada apresenta dados de amostra para ilustrar a interface e as possibilidades de visualização. Ela não possui conexão com o DuckDB nem com o pipeline.
 
-Para obter uma cópia externa, baixe o conjunto na página do Kaggle e confira
-os nomes, cabeçalhos, tipos e codificação dos CSVs antes de substituir os
-arquivos locais. A ingestão não baixa nem reconcilia arquivos.
-
-**Limitação de período:** embora a página do conjunto indique 2006–2022, os
-CSV versionados neste repositório contêm temporadas de 2003 a 2024. Não foi
-possível confirmar apenas pelo conteúdo local que esses arquivos são uma
-cópia sem modificações da versão publicada no Kaggle. Ao atualizar a origem,
-verifique a procedência e o período efetivo dos dados.
-
-## Tecnologias
-
-| Tecnologia | Finalidade | Estado |
-|---|---|---|
-| Python 3.13+ | Implementação do pipeline, painel e testes | Requisito declarado em `pyproject.toml` |
-| `uv` | Ambiente, dependências e execução | Usado pelo projeto; `uv.lock` versionado |
-| DuckDB | Armazenamento e consultas analíticas locais | Usado pelo pipeline e painel |
-| SQL | Definição das consultas Gold | Dez arquivos em `sql/gold/` |
-| pandas | Leitura dos CSVs e manipulação/formatamento no painel | Dependência de execução |
-| Streamlit | Interface interativa | Dependência de execução |
-| Plotly | Gráficos do dashboard | Dependência de execução |
-| pytest / pytest-cov | Testes e cobertura de código | Dependências de desenvolvimento configuradas |
-| Ruff | Lint | Dependência de desenvolvimento; não há regras personalizadas declaradas |
-| MkDocs | Site local da documentação | Dependência de desenvolvimento e configuração presentes |
-| Git / GitHub | Versionamento e hospedagem do repositório | Repositório remoto configurado |
-| GitHub Actions | Integração contínua | Não há workflow configurado |
-| MCP DuckDB | Integração auxiliar com ferramentas no VS Code | Configuração `football-duckdb` em `.vscode/mcp.json`; não é requisito do pipeline |
-
-DuckDB é o mecanismo de banco e execução analítica. MCP é um protocolo para
-integrar ferramentas a recursos; não substitui DuckDB, não define regras de
-negócio e não executa as transformações do pipeline. A configuração existente
-usa `mcp-server-duckdb` em modo somente leitura e é auxiliar ao VS Code. Os
-comandos de ingestão, transformação, Gold e dashboard não dependem desse
-servidor.
-
-O [MotherDuck MCP Server](https://github.com/motherduckdb/mcp-server-motherduck)
-não é o servidor configurado neste repositório.
+O dashboard interativo conectado aos dados locais pode ser executado com Streamlit, conforme as instruções deste README.
 
 ## Arquitetura
 
-```text
-CSV de origem
-    │
-    ▼
-pipeline.ingestao ──► football.bronze
-                           │
-                           ▼
-                 pipeline.transformacao
-                           │
-                           ▼
-                    football.silver
-                           │
-             sql/gold/*.sql + pipeline.gold
-                           │
-                           ▼
-                     football.gold
-                           │
-                           ▼
-              painel.py ──► app.py
-       leitura e gráficos     Streamlit
-```
+O projeto utiliza a arquitetura Medallion para separar ingestão, transformação e disponibilização analítica.
 
-### Bronze
 
-`pipeline/ingestao.py` lê os dois CSVs usando pandas com todas as colunas como
-texto e grava `football.bronze.brasileirao` e `football.bronze.times`. A
-gravação substitui as tabelas; não acumula uma cópia a cada execução. Arquivos
-ausentes ou erros de leitura/gravação fazem a etapa retornar código de erro.
+### Bronze — Ingestão
 
-### Silver
+Responsável por carregar os arquivos CSV para o banco DuckDB.
 
-`pipeline/transformacao.py` verifica as tabelas Bronze e recria as tabelas
-correspondentes em `football.silver`. Converte explicitamente os campos
-numéricos para `BIGINT`, mantendo os campos descritivos em `VARCHAR`.
-Preserva linhas, duplicatas e nulos; valores que não podem ser convertidos
-causam erro. Esta etapa não faz JOIN nem calcula regras analíticas.
+- Leitura dos arquivos utilizando pandas.
+- Colunas inicialmente tratadas como texto.
+- Gravação das tabelas no schema `football.bronze`.
+- Substituição das tabelas a cada execução.
 
-### Gold
+Tabelas:
+- `football.bronze.brasileirao`
+- `football.bronze.times`
 
-`pipeline/gold.py` valida e executa, em ordem alfabética, os arquivos SQL que
-seguem o padrão `NN_nome.sql`. Cada consulta materializa uma tabela no schema
-`football.gold`. O schema é recriado dentro de uma transação: consultas
-inválidas ou tabelas vazias provocam rollback para preservar a materialização
-anterior.
+Módulo: `pipeline/ingestao.py`
 
-### Dashboard
+### Silver — Transformação
 
-`painel.py` abre `football.duckdb` em modo somente leitura, lê tabelas Gold,
-formata tabelas e constrói figuras Plotly. `app.py` monta a interface
-Streamlit, aplica filtros locais e apresenta erros quando dados necessários
-estão ausentes. O painel não dispara o pipeline.
+Responsável por converter os dados da camada Bronze para os tipos definidos pelo projeto.
 
-## Estrutura do repositório
+- Verificação das tabelas de origem.
+- Conversão explícita dos campos numéricos para `BIGINT`.
+- Manutenção dos campos descritivos como `VARCHAR`.
+- Materialização das tabelas no schema `football.silver`.
+
+Tabelas:
+- `football.silver.brasileirao`
+- `football.silver.times`
+
+Módulo: `pipeline/transformacao.py`
+
+### Gold — Análises analíticas
+
+Responsável por executar consultas SQL e materializar os resultados analíticos no schema `football.gold`.
+
+- Execução dos arquivos SQL em ordem alfabética.
+- Validação dos arquivos conforme o padrão `NN_nome.sql`.
+- Materialização das consultas em tabelas independentes.
+- Execução transacional para proteger a materialização anterior em caso de falha.
+
+Módulo: `pipeline/gold.py`
+
+As consultas Gold são a fonte das regras e métricas analíticas do projeto.
+
+## Tecnologias utilizadas
+
+| Tecnologia | Aplicação |
+|---|---|
+| Python 3.13+ | Desenvolvimento do pipeline |
+| uv | Gerenciamento de ambiente e dependências |
+| pandas | Leitura dos arquivos CSV |
+| DuckDB | Banco de dados analítico local |
+| SQL | Transformações e consultas analíticas |
+| Streamlit | Interface do dashboard |
+| Plotly | Visualizações interativas |
+| pytest | Testes automatizados |
+| pytest-cov | Análise de cobertura |
+| Ruff | Análise estática de código |
+| MkDocs | Documentação técnica |
+| Git / GitHub | Versionamento |
+
+## Estrutura do projeto
 
 ```text
 Football/
+│
 ├── .vscode/
-│   └── mcp.json                 # Servidor auxiliar DuckDB para VS Code
+│   └── mcp.json
+│
 ├── bronze/
-│   ├── brasileirao.csv          # Dados de campanhas versionados
-│   └── times.csv                # Cadastro de clubes versionado
-├── docs/                        # Páginas-fonte do MkDocs
+│   ├── brasileirao.csv
+│   └── times.csv
+│
+├── docs/
 │   ├── dados/
 │   └── pipeline/
+│
 ├── pipeline/
-│   ├── db.py                    # Conexão, schema e gravação DuckDB
-│   ├── ingestao.py              # CSV → Bronze
-│   ├── transformacao.py         # Bronze → Silver
-│   └── gold.py                  # SQL → tabelas Gold
-├── sql/gold/                    # Dez consultas analíticas SQL
-├── test/                        # Testes pytest
-├── app.py                       # Interface Streamlit
-├── dashboard.css                # Estilo do protótipo HTML
-├── index.html                   # Protótipo visual estático para GitHub Pages
-├── dashboard.js                # Filtros demonstrativos do protótipo
-├── mkdocs.yml                   # Configuração da documentação
-├── painel.py                    # Leitura Gold, formatação e gráficos
-├── pyproject.toml               # Dependências e configuração pytest/coverage
-├── ui.py                        # Entrada opcional da DuckDB Local UI
-└── uv.lock                      # Lockfile de dependências
+│   ├── db.py
+│   ├── ingestao.py
+│   ├── transformacao.py
+│   └── gold.py
+│
+├── sql/
+│   └── gold/
+│       ├── 01_campeoes_por_temporada.sql
+│       ├── 02_evolucao_pontuacao_campeao.sql
+│       ├── 03_ranking_historico_times.sql
+│       ├── 04_maiores_saldos_de_gols.sql
+│       ├── 05_aproveitamento_por_time_temporada.sql
+│       ├── 06_desempenho_por_regiao.sql
+│       ├── 07_clubes_por_estado.sql
+│       ├── 08_perfil_historico_dos_clubes.sql
+│       ├── 09_comparativo_campanhas_por_regiao.sql
+│       └── 10_relacao_posicao_saldo_gols.sql
+│
+├── test/
+│
+├── app.py
+├── painel.py
+├── dashboard.css
+├── dashboard.js
+├── index.html
+├── mkdocs.yml
+├── pyproject.toml
+├── uv.lock
+└── README.md
 ```
 
-`football.duckdb` é um arquivo de banco local ignorado pelo Git, criado e
-preenchido pelo pipeline. A página está disponível no
-[GitHub Pages](https://diego99xz.github.io/pipeline-Football/) e é servida a
-partir de `index.html`: trata-se de uma demonstração estática com dados de
-amostra somente para visualização. Os filtros são interativos, mas o site não
-lê o DuckDB, não atualiza os dados e não substitui o app Streamlit.
+O banco `football.duckdb` é criado localmente pelo pipeline e não é versionado no Git.
 
-Não existe `main.py`: as etapas do pipeline são pontos de entrada
-independentes executados com `python -m`.
+## Dados de origem
 
-## Instalação
+O projeto utiliza dados históricos do Campeonato Brasileiro.
+
+Fonte de referência:
+
+[Kaggle — Brasileirão Série A 2006–2022](https://www.kaggle.com/datasets/lucasyukioimafuko/brasileirao-serie-a-2006-2022)
+
+Arquivos utilizados:
+
+| Arquivo | Conteúdo |
+|---|---|
+| `brasileirao.csv` | Temporadas, posições, pontuação, jogos, vitórias, empates, derrotas e gols |
+| `times.csv` | Cadastro dos clubes, siglas, fundação, estádio, cidade, estado e região |
+
+**Observação sobre os dados:** embora o conjunto de referência do Kaggle indique o período de 2006 a 2022, os arquivos atualmente versionados no repositório apresentam temporadas de 2003 a 2024. A procedência e a correspondência integral entre essas versões ainda não foram confirmadas.
+
+A ingestão utiliza os arquivos locais e não realiza download automático nem atualização da fonte externa.
+
+## Consultas analíticas — Gold
+
+A camada Gold possui dez consultas SQL, organizadas para responder a diferentes perguntas sobre o histórico do campeonato.
+
+| Nº | Análise | Objetivo |
+|---:|---|---|
+| 01 | Campeões por temporada | Identificar os campeões e suas campanhas |
+| 02 | Evolução da pontuação dos campeões | Comparar a pontuação dos campeões ao longo dos anos |
+| 03 | Ranking histórico dos times | Consultar as campanhas por temporada e posição |
+| 04 | Maiores saldos de gols | Identificar as campanhas com maiores saldos |
+| 05 | Aproveitamento por time e temporada | Comparar o aproveitamento dos clubes |
+| 06 | Desempenho por região | Analisar métricas agrupadas por região |
+| 07 | Clubes por estado | Explorar a distribuição geográfica dos clubes |
+| 08 | Perfil histórico dos clubes | Consultar participações e desempenho histórico |
+| 09 | Comparativo de campanhas por região | Comparar médias regionais por temporada |
+| 10 | Relação entre posição e saldo de gols | Explorar a relação entre classificação e saldo |
+
+As consultas estão disponíveis em `sql/gold/`.
+
+## Dashboard
+
+O dashboard permite explorar os resultados materializados na camada Gold por meio de indicadores, tabelas e gráficos interativos.
+
+Tecnologias:
+- Streamlit para a interface.
+- Plotly para visualizações.
+- DuckDB para consulta dos resultados analíticos.
+
+A implementação está dividida em dois módulos:
+
+| Arquivo | Responsabilidade |
+|---|---|
+| `painel.py` | Acesso aos dados Gold, formatação e construção dos gráficos |
+| `app.py` | Interface Streamlit, filtros e apresentação |
+
+O dashboard possui dez análises numeradas, com filtros de temporada conforme a disponibilidade de cada consulta.
+
+**Importante:** o dashboard não executa as etapas de ingestão, transformação ou materialização Gold. É necessário executar o pipeline previamente.
+
+## Instalação e configuração
 
 ### Pré-requisitos
 
 - Python 3.13 ou superior.
-- [`uv`](https://docs.astral.sh/uv/).
-- Os CSVs de entrada em `bronze/` (já presentes no repositório; confira a
-  [origem](#dados-de-origem) ao substituí-los).
+- [uv](https://docs.astral.sh/uv/).
+- Git.
 
-Clone o repositório e sincronize o ambiente:
+### Clonar o repositório
 
 ```bash
 git clone https://github.com/Diego99xz/pipeline-Football.git
+
 cd pipeline-Football
+```
+
+### Instalar as dependências
+
+```bash
 uv sync
 ```
 
+O `uv` utiliza o `pyproject.toml` e o `uv.lock` para preparar o ambiente do projeto.
+
 ## Executar o pipeline
 
-Execute as etapas nesta ordem:
+As etapas devem ser executadas na sequência abaixo.
+
+### 1. Ingestão — Bronze
 
 ```bash
 uv run python -m pipeline.ingestao
+```
+
+Carrega os arquivos CSV e materializa as tabelas Bronze.
+
+### 2. Transformação — Silver
+
+```bash
 uv run python -m pipeline.transformacao
+```
+
+Lê as tabelas Bronze, realiza as conversões de tipos e materializa as tabelas Silver.
+
+### 3. Análises — Gold
+
+```bash
 uv run python -m pipeline.gold
 ```
 
-1. **Ingestão:** requer `bronze/brasileirao.csv` e `bronze/times.csv` e grava
-   as tabelas Bronze com valores textuais.
-2. **Transformação:** requer ambas as tabelas Bronze e recria Silver com os
-   tipos definidos no código.
-3. **Gold:** requer as tabelas Silver e os arquivos `sql/gold/*.sql`; valida
-   nomes e executa todas as consultas dentro de uma transação.
+Executa as consultas SQL e materializa as tabelas analíticas Gold.
 
-O pipeline não é iniciado automaticamente pelo Streamlit, MkDocs nem pelos
-testes. Erros de entrada e conversão são informados pela etapa correspondente.
-
-## Consultas Gold
-
-Os arquivos SQL são a fonte das regras e fórmulas analíticas. Todos leem de
-Silver; as consultas que usam cadastro de clube fazem JOIN com
-`football.silver.times`.
-
-| Nº | Arquivo SQL | Objetivo e grão | Entrada(s) → saída Gold |
-|---:|---|---|---|
-| 01 | `01_campeoes_por_temporada.sql` | Campeão e desempenho; uma temporada | `silver.brasileirao` → `campeoes_por_temporada` |
-| 02 | `02_evolucao_pontuacao_campeao.sql` | Pontuação do campeão no histórico; uma temporada/campeão | `silver.brasileirao` → `evolucao_pontuacao_campeao` |
-| 03 | `03_ranking_historico_times.sql` | Campanhas ordenadas por temporada e posição; um time/temporada | `silver.brasileirao` → `ranking_historico_times` |
-| 04 | `04_maiores_saldos_de_gols.sql` | Campanhas ordenadas por saldo; um time/temporada | `silver.brasileirao` → `maiores_saldos_de_gols` |
-| 05 | `05_aproveitamento_por_time_temporada.sql` | Aproveitamento de pontos; um time/temporada | `silver.brasileirao` → `aproveitamento_por_time_temporada` |
-| 06 | `06_desempenho_por_regiao.sql` | Métricas agregadas regionais; uma região/temporada | `silver.brasileirao`, `silver.times` → `desempenho_por_regiao` |
-| 07 | `07_clubes_por_estado.sql` | Clubes e regiões por estado; um estado | `silver.times` → `clubes_por_estado` |
-| 08 | `08_perfil_historico_dos_clubes.sql` | Participações e desempenho histórico; um clube | `silver.brasileirao`, `silver.times` → `perfil_historico_dos_clubes` |
-| 09 | `09_comparativo_campanhas_por_regiao.sql` | Médias regionais por temporada; uma região/temporada | `silver.brasileirao`, `silver.times` → `comparativo_campanhas_por_regiao` |
-| 10 | `10_relacao_posicao_saldo_gols.sql` | Campanhas para comparar posição e saldo; um time/temporada | `silver.brasileirao`, `silver.times` (LEFT JOIN) → `relacao_posicao_saldo_gols` |
-
-A Query 05 calcula no SQL o percentual de pontos sobre o máximo possível
-(três pontos por jogo). Consulte os arquivos em `sql/gold/` para a definição
-completa das expressões e ordenações.
-
-## Dashboard
-
-Depois de executar o pipeline até Gold:
+### 4. Executar o dashboard
 
 ```bash
 uv run streamlit run app.py
 ```
 
-O Streamlit disponibiliza o endereço local no terminal. `painel.py` contém a
-leitura e os construtores de gráficos; `app.py` contém a apresentação. A
-interface inclui quatro cartões de indicadores e análises numeradas de 01 a
-10. Ranking (03) aparece em tabela; outras consultas usam gráficos ou tabelas
-conforme a implementação.
+O Streamlit disponibiliza o endereço local para acesso à aplicação no terminal.
 
-Os filtros de temporada são locais: a Query 01 é filtrável; a Query 02 mostra
-a evolução histórica sem filtro. As Queries 03, 04, 05 e 06 iniciam na
-temporada mais recente, sem opção “Todas as temporadas”; as Queries 09 e 10
-permitem todas as temporadas. As Queries 07 e 08 são consolidadas e não têm
-filtro. O botão “Recarregar dados” limpa o cache e relê Gold.
+## Testes e qualidade de código
 
-O banco precisa existir e conter as tabelas Gold. O app exibe erros ou avisos
-para banco, tabelas, colunas ou temporadas ausentes; não executa a
-materialização por conta própria.
+O projeto utiliza pytest para verificar o comportamento dos módulos do pipeline e das funções do painel.
 
-## Testes e qualidade
+### Executar os testes
 
-### Testes automatizados
+```bash
+uv run pytest
+```
 
-Execute:
+### Executar com cobertura
 
 ```bash
 uv run pytest --cov
 ```
 
-O projeto configura `test/` como diretório de testes e uma cobertura mínima
-global de 60%. A medição inclui `pipeline/` e `painel.py`, excluindo `app.py`,
-`ui.py` e a pasta de testes. Os testes cobrem banco, ingestão, transformação,
-materialização Gold e funções do painel.
+A configuração atual estabelece uma cobertura mínima global de 60%.
 
-Os cenários usam dados inventados e bancos DuckDB temporários; não exigem que
-o pipeline tenha sido executado nem usam o banco real como fonte de
-resultados esperados. `app.py` não está na cobertura e deve ser validado
-visualmente no navegador. Testes automatizados não substituem a validação da
-qualidade ou procedência dos CSVs reais.
+Os testes utilizam dados inventados e bancos DuckDB temporários, evitando dependência dos dados reais e do banco utilizado pelo dashboard.
 
-### Ruff e estilo
+O módulo `app.py` não está incluído na medição de cobertura e deve ser validado visualmente no navegador.
 
-Ruff está instalado como dependência de desenvolvimento. Não há regras
-específicas ou scripts de formatação configurados no `pyproject.toml`. O
-comando abaixo verifica os testes:
+### Verificação com Ruff
 
 ```bash
 uv run ruff check test
 ```
 
-O código deve manter nomes claros, funções com responsabilidades definidas e
-estilo legível. Não há validação PEP 8 independente configurada.
+O comando verifica o diretório de testes conforme a configuração atual.
 
-### Scripts de validação
+## Documentação técnica — MkDocs
 
-Não há scripts dedicados de validação de dados ou automação além das etapas
-do pipeline, dos testes pytest, do comando Ruff e do build MkDocs.
+O projeto utiliza MkDocs para organizar a documentação técnica em páginas Markdown.
 
-## Documentação MkDocs
+A documentação contempla informações sobre arquitetura, dados, pipeline, consultas analíticas e execução do projeto.
 
-As páginas-fonte ficam em `docs/`, com navegação organizada por arquitetura,
-instalação, pipeline, camadas, consultas, dashboard, testes e referências.
-`mkdocs.yml` usa o tema padrão `mkdocs`, locale `pt_BR`, alternância de cores,
-realce de Python/SQL/Bash/TOML e extensões de tabelas, blocos de código e
-índice de títulos. O tema Material não está instalado.
-
-Para visualizar localmente ou gerar o site estático:
+### Executar localmente
 
 ```bash
 uv run mkdocs serve
+```
+
+### Gerar o site
+
+```bash
 uv run mkdocs build --strict
 ```
 
-O site gerado vai para `site/`, ignorado pelo Git. Há configuração e build
-local; não há publicação configurada.
+O site gerado fica no diretório `site/`, que não é versionado no Git.
 
-## Git, segurança e CI
+A configuração atual permite a geração e visualização local da documentação. Não há publicação automática configurada.
 
-### Branches e commits
+## Configurações adicionais
 
-Como convenção recomendada para novas tarefas, use uma branch por mudança no
-formato `<ID_DA_TAREFA>-<titulo-da-tarefa>`, com título curto separado por
-hífens, por exemplo `123-adicionar-dashboard`. O exemplo é ilustrativo, não
-representa uma tarefa real. Faça commits descritivos e revise as alterações
-antes de integrá-las; use pull requests quando esse fluxo estiver disponível.
-Essa convenção não é imposta por configuração do repositório.
+### MCP DuckDB
 
-### `.gitignore` e credenciais
+O repositório contém uma configuração MCP em `.vscode/mcp.json`, utilizando o servidor `mcp-server-duckdb` em modo somente leitura.
 
-O `.gitignore` atual cobre ambientes virtuais, caches Python/pytest/Ruff,
-arquivos de cobertura, a saída `site/`, bancos DuckDB locais, arquivos `.env`,
-chaves privadas e metadados comuns do sistema operacional. Os CSVs da pasta
-`bronze/` são versionados; confira a licença e a política de compartilhamento
-dos dados antes de adicionar outros arquivos.
+Essa integração é auxiliar ao ambiente de desenvolvimento no VS Code e não é necessária para executar o pipeline.
 
-`.gitignore` não remove arquivos que já estão versionados. Ele também não
-substitui gestão segura de segredos: não inclua senhas, tokens ou credenciais
-em commits e, se um segredo for exposto, revogue-o.
+MCP é um protocolo de integração entre ferramentas e recursos. Não substitui o DuckDB nem executa as transformações do projeto.
 
-A configuração `.vscode/mcp.json` registra um servidor local `football-duckdb`
-em modo somente leitura. Verifique cuidadosamente mudanças nesse arquivo
-antes de compartilhá-las; o arquivo de configuração não é necessário para
-executar o pipeline.
+### Git e organização
 
-### Integração contínua
+Convenção recomendada para branches:
 
-Não há arquivos em `.github/workflows/`; GitHub Actions não executa testes,
-lint ou build automaticamente neste repositório. Automatizar essas
-verificações é uma melhoria futura, não uma capacidade atual.
+```text
+<ID_DA_TAREFA>-<titulo-da-tarefa>
+```
 
-## Limitações e próximos passos
+Exemplo:
 
-- Confirmar e documentar a procedência dos CSVs e a diferença entre o período
-  anunciado no Kaggle (2006–2022) e o período observado nos arquivos locais
-  (2003–2024).
-- Adicionar workflows GitHub Actions para testes, Ruff e build da
-  documentação.
-- Validar manualmente a interface Streamlit em diferentes larguras de tela.
-- Avaliar o uso de MkDocs Material caso seja desejado um tema diferente; o
-  projeto atualmente usa o tema padrão.
+```bash
+git checkout -b 123-adicionar-dashboard
+```
 
-Não há atualização em tempo real, ingestão incremental, orquestração
-agendada nem execução em nuvem configuradas.
+Os commits devem utilizar mensagens descritivas, facilitando o rastreamento das alterações.
+
+### Segurança
+
+O `.gitignore` contempla ambientes virtuais, caches, bancos locais, arquivos de cobertura e arquivos de configuração de segredos.
+
+Não versionar tokens, senhas, chaves privadas ou credenciais. O `.gitignore` não substitui o gerenciamento seguro de segredos e não remove arquivos que já estejam versionados.
+
+## Limitações e melhorias futuras
+
+O projeto possui algumas limitações conhecidas:
+
+- Execução manual e independente das etapas.
+- Ausência de orquestração e agendamento.
+- Ausência de ingestão incremental.
+- Ausência de integração contínua com GitHub Actions.
+- Ausência de publicação automática da documentação MkDocs.
+- Necessidade de validar a procedência e a atualização dos dados de origem.
+
+Possíveis evoluções incluem:
+
+- Implementar testes e lint automatizados em GitHub Actions.
+- Adicionar validações de qualidade dos dados.
+- Automatizar a execução das etapas do pipeline.
+- Evoluir a documentação técnica.
+- Ampliar as análises históricas e comparativas.
 
 ## Referências
 
-- [Dataset Brasileirão Série A 2006–2022 — Kaggle](https://www.kaggle.com/datasets/lucasyukioimafuko/brasileirao-serie-a-2006-2022)
-- [Repositório Football no GitHub](https://github.com/Diego99xz/pipeline-Football)
+- [Dataset Brasileirão Série A — Kaggle](https://www.kaggle.com/datasets/lucasyukioimafuko/brasileirao-serie-a-2006-2022)
+- [Repositório Football — GitHub](https://github.com/Diego99xz/pipeline-Football)
 - [Python](https://docs.python.org/3/)
 - [uv](https://docs.astral.sh/uv/)
 - [DuckDB](https://duckdb.org/docs/)
+- [pandas](https://pandas.pydata.org/docs/)
 - [Streamlit](https://docs.streamlit.io/)
-- [Plotly para Python](https://plotly.com/python/)
+- [Plotly](https://plotly.com/python/)
 - [pytest](https://docs.pytest.org/)
 - [pytest-cov](https://pytest-cov.readthedocs.io/)
 - [Ruff](https://docs.astral.sh/ruff/)
 - [MkDocs](https://www.mkdocs.org/)
-- [GitHub Actions](https://docs.github.com/actions) — recurso disponível, mas não configurado neste repositório.
-- [MotherDuck MCP Server](https://github.com/motherduckdb/mcp-server-motherduck) — referência não utilizada; a configuração local atual usa `mcp-server-duckdb`.
-- [Gerador de `.gitignore` da Toptal](https://www.toptal.com/developers/gitignore)
+
+---
+
+**Desenvolvido como projeto de estudo e portfólio em Engenharia de Dados.**
