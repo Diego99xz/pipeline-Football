@@ -9,6 +9,11 @@ O repositório também contém testes automatizados com pytest e documentação
 técnica gerada localmente pelo MkDocs. O pipeline é executado por etapas
 independentes; não há orquestrador central nem atualização automática.
 
+**Exemplo final — dashboard estático:** [acesse a visualização no GitHub
+Pages](https://diego99xz.github.io/pipeline-Football/index.html). A página
+apresenta somente dados de amostra para demonstração; não está conectada ao
+DuckDB nem ao pipeline.
+
 ## Índice
 
 - [Objetivos e estado atual](#objetivos-e-estado-atual)
