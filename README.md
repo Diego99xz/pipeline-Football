@@ -6,7 +6,7 @@
 [![DuckDB](https://img.shields.io/badge/DuckDB-Analytics-FFF000?logo=duckdb&logoColor=black)](https://duckdb.org/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![Plotly](https://img.shields.io/badge/Plotly-Visualização-3F4F75?logo=plotly&logoColor=white)](https://plotly.com/python/)
-[![pytest](https://img.shields.io/badge/Tests-pytest-0A9EDC?logo=pytest&logoColor=white)](https://docs.pytest.org/)
+[![pytest](https://img.shields.io/badge/Tests-31%20passed-0A9EDC?logo=pytest&logoColor=white)](https://docs.pytest.org/)
 
 ## Sobre o projeto
 
@@ -281,7 +281,46 @@ uv run pytest
 uv run pytest --cov
 ```
 
-A configuração atual estabelece uma cobertura mínima global de 60%.
+### Resultado da execução
+
+<details>
+<summary><strong>Resultado dos testes — Python 3.13.7 / Windows</strong></summary>
+
+| Módulo | Testes executados (Statements) | Não cobertos | Cobertura |
+|---|---:|---:|---:|
+| `painel.py` | 135 | 0 | 100% |
+| `pipeline/db.py` | 19 | 0 | 100% |
+| `pipeline/gold.py` | 104 | 5 | 95% |
+| `pipeline/ingestao.py` | 44 | 5 | 89% |
+| `pipeline/transformacao.py` | 54 | 4 | 93% |
+| **TOTAL** | **356** | **14** | **96%** |
+
+**Resultado geral:**
+
+- **31 testes aprovados**
+- **0 testes com falha**
+- **96,07% de cobertura total**
+- **60% de cobertura mínima exigida**
+- **12,52 segundos de execução**
+
+```text
+============================================== tests coverage ==============================================
+_____________________________ coverage: platform win32, python 3.13.7-final-0 ______________________________
+
+Name                        Stmts   Miss  Cover   Missing
+---------------------------------------------------------
+painel.py                     135      0   100%
+pipeline\db.py                 19      0   100%
+pipeline\gold.py              104      5    95%   209-210, 226-227, 231
+pipeline\ingestao.py           44      5    89%   26, 70-72, 78
+pipeline\transformacao.py      54      4    93%   155-157, 163
+---------------------------------------------------------
+TOTAL                         356     14    96%
+Required test coverage of 60.0% reached. Total coverage: 96.07%
+=========================================== 31 passed in 12.52s ============================================
+```
+
+</details>
 
 Os testes utilizam dados inventados e bancos DuckDB temporários, evitando dependência dos dados reais e do banco utilizado pelo dashboard.
 
@@ -327,46 +366,13 @@ Essa integração é auxiliar ao ambiente de desenvolvimento no VS Code e não �
 
 MCP é um protocolo de integração entre ferramentas e recursos. Não substitui o DuckDB nem executa as transformações do projeto.
 
-### Git e organização
-
-Convenção recomendada para branches:
-
-```text
-<ID_DA_TAREFA>-<titulo-da-tarefa>
-```
-
-Exemplo:
-
-```bash
-git checkout -b 123-adicionar-dashboard
-```
-
-Os commits devem utilizar mensagens descritivas, facilitando o rastreamento das alterações.
-
 ### Segurança
 
 O `.gitignore` contempla ambientes virtuais, caches, bancos locais, arquivos de cobertura e arquivos de configuração de segredos.
 
 Não versionar tokens, senhas, chaves privadas ou credenciais. O `.gitignore` não substitui o gerenciamento seguro de segredos e não remove arquivos que já estejam versionados.
 
-## Limitações e melhorias futuras
 
-O projeto possui algumas limitações conhecidas:
-
-- Execução manual e independente das etapas.
-- Ausência de orquestração e agendamento.
-- Ausência de ingestão incremental.
-- Ausência de integração contínua com GitHub Actions.
-- Ausência de publicação automática da documentação MkDocs.
-- Necessidade de validar a procedência e a atualização dos dados de origem.
-
-Possíveis evoluções incluem:
-
-- Implementar testes e lint automatizados em GitHub Actions.
-- Adicionar validações de qualidade dos dados.
-- Automatizar a execução das etapas do pipeline.
-- Evoluir a documentação técnica.
-- Ampliar as análises históricas e comparativas.
 
 ## Referências
 
