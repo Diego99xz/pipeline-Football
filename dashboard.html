@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Brasileirão · Dashboard histórico</title>
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="brand-block">
+          <p class="eyebrow">Análise histórica</p>
+          <h1>Brasileirão · Dashboard histórico</h1>
+          <p class="subtitle">Indicadores históricos do Campeonato Brasileiro: campeões, campanhas, desempenho regional e perfil dos clubes.</p>
+        </div>
+        <button type="button" class="refresh-btn" id="refresh-demo">Restaurar visualização</button>
+      </header>
+
+      <p class="demo-notice">Visualização HTML demonstrativa. Os filtros são interativos, mas os dados não são carregados do DuckDB.</p>
+
+      <main class="dashboard">
+        <section class="metrics-grid" aria-label="Indicadores principais">
+          <article class="metric-card accent-blue">
+            <span class="metric-label">Campeão mais recente</span>
+            <strong class="metric-value">Botafogo</strong>
+            <small class="metric-meta">2024 · 79 pontos</small>
+          </article>
+          <article class="metric-card accent-green">
+            <span class="metric-label">Média de pontos</span>
+            <strong class="metric-value">64,4</strong>
+            <small class="metric-meta">Exemplo histórico</small>
+          </article>
+          <article class="metric-card accent-orange">
+            <span class="metric-label">Maior saldo</span>
+            <strong class="metric-value">+55</strong>
+            <small class="metric-meta">Campanha demonstrativa</small>
+          </article>
+          <article class="metric-card accent-purple">
+            <span class="metric-label">Clubes por estado</span>
+            <strong class="metric-value">18</strong>
+            <small class="metric-meta">SP lidera no exemplo</small>
+          </article>
+        </section>
+
+        <section class="analysis-group">
+          <div class="section-header">
+            <div>
+              <h2>Campeões e evolução histórica</h2>
+              <p>Campeões por edição e pontuação registrada para cada título.</p>
+            </div>
+          </div>
+          <div class="two-col-layout">
+            <article class="panel">
+              <div class="panel-header panel-heading-with-control">
+                <h3>01 · Campeões por temporada</h3>
+                <label class="panel-control">Temporada
+                  <select data-filter="q1">
+                    <option value="all">Todas as temporadas</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+                  </select>
+                </label>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Temporada</th><th>Campeão</th><th>Pontos</th></tr></thead>
+                  <tbody>
+                    <tr data-season="2024"><td>2024</td><td>Botafogo</td><td>79</td></tr>
+                    <tr data-season="2023"><td>2023</td><td>Palmeiras</td><td>74</td></tr>
+                    <tr data-season="2022"><td>2022</td><td>Flamengo</td><td>71</td></tr>
+                    <tr data-season="2021"><td>2021</td><td>Atlético-MG</td><td>77</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-header"><h3>02 · Pontuação dos campeões por temporada</h3></div>
+              <div class="chart chart-line" role="img" aria-label="Gráfico ilustrativo da pontuação dos campeões por temporada">
+                <span class="axis-label axis-x">Temporada</span>
+                <span class="axis-label axis-y">Pontos</span>
+                <div class="line-plot">
+                  <span class="dot" style="--left: 10%; --bottom: 28%;"></span>
+                  <span class="dot" style="--left: 32%; --bottom: 36%;"></span>
+                  <span class="dot" style="--left: 54%; --bottom: 42%;"></span>
+                  <span class="dot" style="--left: 76%; --bottom: 22%;"></span>
+                  <svg viewBox="0 0 360 210" preserveAspectRatio="none" aria-hidden="true"><path d="M10,160 L90,130 L170,118 L250,80 L330,68" /></svg>
+                </div>
+                <div class="chart-years"><span>2020</span><span>2021</span><span>2022</span><span>2023</span><span>2024</span></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="analysis-group">
+          <div class="section-header">
+            <div>
+              <h2>Classificação e desempenho dos times</h2>
+              <p>Filtros independentes para ranking, saldo de gols e aproveitamento.</p>
+            </div>
+          </div>
+          <div class="three-col-layout">
+            <article class="panel">
+              <div class="panel-header panel-heading-with-control">
+                <h3>03 · Ranking dos times</h3>
+                <label class="panel-control">Temporada
+                  <select data-filter="q3" data-default="2024">
+                    <option value="2024" selected>2024</option><option value="2023">2023</option><option value="2022">2022</option><option value="2021">2021</option>
+                  </select>
+                </label>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Pos.</th><th>Time</th><th>Pontos</th></tr></thead>
+                  <tbody>
+                    <tr data-season="2024"><td>1</td><td>Botafogo</td><td>79</td></tr>
+                    <tr data-season="2024"><td>2</td><td>Palmeiras</td><td>73</td></tr>
+                    <tr data-season="2024"><td>3</td><td>Flamengo</td><td>70</td></tr>
+                    <tr data-season="2023"><td>1</td><td>Palmeiras</td><td>70</td></tr>
+                    <tr data-season="2023"><td>2</td><td>Grêmio</td><td>68</td></tr>
+                    <tr data-season="2023"><td>3</td><td>Atlético-MG</td><td>66</td></tr>
+                    <tr data-season="2022"><td>1</td><td>Palmeiras</td><td>81</td></tr>
+                    <tr data-season="2022"><td>2</td><td>Internacional</td><td>73</td></tr>
+                    <tr data-season="2022"><td>3</td><td>Fluminense</td><td>70</td></tr>
+                    <tr data-season="2021"><td>1</td><td>Atlético-MG</td><td>84</td></tr>
+                    <tr data-season="2021"><td>2</td><td>Flamengo</td><td>71</td></tr>
+                    <tr data-season="2021"><td>3</td><td>Palmeiras</td><td>66</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-header panel-heading-with-control">
+                <h3>04 · Maiores saldos de gols</h3>
+                <label class="panel-control">Temporada
+                  <select data-filter="q4" data-default="2024">
+                    <option value="2024" selected>2024</option><option value="2023">2023</option><option value="2022">2022</option><option value="2021">2021</option>
+                  </select>
+                </label>
+              </div>
+              <div class="bar-chart">
+                <div class="bar-item" data-season="2024"><span class="bar-label">Cruzeiro</span><span class="bar" style="--size:90%"></span><span class="bar-value">+55</span></div>
+                <div class="bar-item" data-season="2024"><span class="bar-label">Flamengo</span><span class="bar" style="--size:78%"></span><span class="bar-value">+49</span></div>
+                <div class="bar-item" data-season="2024"><span class="bar-label">Santos</span><span class="bar" style="--size:66%"></span><span class="bar-value">+45</span></div>
+                <div class="bar-item" data-season="2023"><span class="bar-label">Palmeiras</span><span class="bar" style="--size:86%"></span><span class="bar-value">+31</span></div>
+                <div class="bar-item" data-season="2023"><span class="bar-label">Grêmio</span><span class="bar" style="--size:71%"></span><span class="bar-value">+23</span></div>
+                <div class="bar-item" data-season="2023"><span class="bar-label">Flamengo</span><span class="bar" style="--size:62%"></span><span class="bar-value">+18</span></div>
+                <div class="bar-item" data-season="2022"><span class="bar-label">Palmeiras</span><span class="bar" style="--size:90%"></span><span class="bar-value">+39</span></div>
+                <div class="bar-item" data-season="2022"><span class="bar-label">Flamengo</span><span class="bar" style="--size:72%"></span><span class="bar-value">+27</span></div>
+                <div class="bar-item" data-season="2022"><span class="bar-label">Fluminense</span><span class="bar" style="--size:58%"></span><span class="bar-value">+19</span></div>
+                <div class="bar-item" data-season="2021"><span class="bar-label">Atlético-MG</span><span class="bar" style="--size:90%"></span><span class="bar-value">+33</span></div>
+                <div class="bar-item" data-season="2021"><span class="bar-label">Flamengo</span><span class="bar" style="--size:76%"></span><span class="bar-value">+33</span></div>
+                <div class="bar-item" data-season="2021"><span class="bar-label">Palmeiras</span><span class="bar" style="--size:55%"></span><span class="bar-value">+15</span></div>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-header panel-heading-with-control">
+                <h3>05 · Aproveitamento dos times</h3>
+                <label class="panel-control">Temporada
+                  <select data-filter="q5" data-default="2024">
+                    <option value="2024" selected>2024</option><option value="2023">2023</option><option value="2022">2022</option><option value="2021">2021</option>
+                  </select>
+                </label>
+              </div>
+              <div class="bar-chart horizontal-bars">
+                <div class="bar-line" data-season="2024"><span class="line-label">Botafogo</span><span class="line-track"><span class="line-fill" style="width:88%"></span></span><span class="line-value">69,3%</span></div>
+                <div class="bar-line" data-season="2024"><span class="line-label">Palmeiras</span><span class="line-track"><span class="line-fill alt" style="width:82%"></span></span><span class="line-value">64,0%</span></div>
+                <div class="bar-line" data-season="2024"><span class="line-label">Flamengo</span><span class="line-track"><span class="line-fill alt2" style="width:75%"></span></span><span class="line-value">61,4%</span></div>
+                <div class="bar-line" data-season="2023"><span class="line-label">Palmeiras</span><span class="line-track"><span class="line-fill" style="width:86%"></span></span><span class="line-value">61,4%</span></div>
+                <div class="bar-line" data-season="2023"><span class="line-label">Grêmio</span><span class="line-track"><span class="line-fill alt" style="width:80%"></span></span><span class="line-value">59,6%</span></div>
+                <div class="bar-line" data-season="2023"><span class="line-label">Atlético-MG</span><span class="line-track"><span class="line-fill alt2" style="width:74%"></span></span><span class="line-value">57,9%</span></div>
+                <div class="bar-line" data-season="2022"><span class="line-label">Palmeiras</span><span class="line-track"><span class="line-fill" style="width:90%"></span></span><span class="line-value">71,1%</span></div>
+                <div class="bar-line" data-season="2022"><span class="line-label">Internacional</span><span class="line-track"><span class="line-fill alt" style="width:81%"></span></span><span class="line-value">64,0%</span></div>
+                <div class="bar-line" data-season="2022"><span class="line-label">Fluminense</span><span class="line-track"><span class="line-fill alt2" style="width:75%"></span></span><span class="line-value">61,4%</span></div>
+                <div class="bar-line" data-season="2021"><span class="line-label">Atlético-MG</span><span class="line-track"><span class="line-fill" style="width:90%"></span></span><span class="line-value">73,7%</span></div>
+                <div class="bar-line" data-season="2021"><span class="line-label">Flamengo</span><span class="line-track"><span class="line-fill alt" style="width:79%"></span></span><span class="line-value">62,3%</span></div>
+                <div class="bar-line" data-season="2021"><span class="line-label">Palmeiras</span><span class="line-track"><span class="line-fill alt2" style="width:73%"></span></span><span class="line-value">57,9%</span></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="analysis-group">
+          <div class="section-header">
+            <div>
+              <h2>Análises regionais</h2>
+              <p>Filtros independentes em cada análise com temporada.</p>
+            </div>
+          </div>
+          <div class="two-col-layout">
+            <article class="panel">
+              <div class="panel-header panel-heading-with-control">
+                <h3>06 · Desempenho agregado por região</h3>
+                <label class="panel-control">Temporada
+                  <select data-filter="q6" data-default="2024">
+                    <option value="2024" selected>2024</option><option value="2023">2023</option><option value="2022">2022</option><option value="2021">2021</option>
+                  </select>
+                </label>
+              </div>
+              <div class="bar-chart horizontal-bars">
+                <div class="bar-line" data-season="2024"><span class="line-label">Sudeste</span><span class="line-track"><span class="line-fill purple" style="width:92%"></span></span><span class="line-value">69,8</span></div>
+                <div class="bar-line" data-season="2024"><span class="line-label">Sul</span><span class="line-track"><span class="line-fill purple" style="width:80%"></span></span><span class="line-value">63,5</span></div>
+                <div class="bar-line" data-season="2024"><span class="line-label">Centro-Oeste</span><span class="line-track"><span class="line-fill purple" style="width:60%"></span></span><span class="line-value">45,7</span></div>
+                <div class="bar-line" data-season="2023"><span class="line-label">Sudeste</span><span class="line-track"><span class="line-fill purple" style="width:90%"></span></span><span class="line-value">68,1</span></div>
+                <div class="bar-line" data-season="2023"><span class="line-label">Sul</span><span class="line-track"><span class="line-fill purple" style="width:78%"></span></span><span class="line-value">61,2</span></div>
+                <div class="bar-line" data-season="2023"><span class="line-label">Centro-Oeste</span><span class="line-track"><span class="line-fill purple" style="width:58%"></span></span><span class="line-value">44,3</span></div>
+                <div class="bar-line" data-season="2022"><span class="line-label">Sudeste</span><span class="line-track"><span class="line-fill purple" style="width:94%"></span></span><span class="line-value">71,2</span></div>
+                <div class="bar-line" data-season="2022"><span class="line-label">Sul</span><span class="line-track"><span class="line-fill purple" style="width:79%"></span></span><span class="line-value">62,0</span></div>
+                <div class="bar-line" data-season="2022"><span class="line-label">Centro-Oeste</span><span class="line-track"><span class="line-fill purple" style="width:61%"></span></span><span class="line-value">46,1</span></div>
+                <div class="bar-line" data-season="2021"><span class="line-label">Sudeste</span><span class="line-track"><span class="line-fill purple" style="width:89%"></span></span><span class="line-value">67,2</span></div>
+                <div class="bar-line" data-season="2021"><span class="line-label">Sul</span><span class="line-track"><span class="line-fill purple" style="width:76%"></span></span><span class="line-value">59,8</span></div>
+                <div class="bar-line" data-season="2021"><span class="line-label">Centro-Oeste</span><span class="line-track"><span class="line-fill purple" style="width:55%"></span></span><span class="line-value">42,6</span></div>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-header panel-heading-with-control">
+                <h3>09 · Comparativo regional de campanhas</h3>
+                <label class="panel-control">Temporada
+                  <select data-filter="q9">
+                    <option value="all">Todas as temporadas</option><option value="2024">2024</option><option value="2023">2023</option><option value="2022">2022</option><option value="2021">2021</option>
+                  </select>
+                </label>
+              </div>
+              <div class="bar-chart horizontal-bars">
+                <div class="bar-line" data-season="2024"><span class="line-label">Sudeste</span><span class="line-track"><span class="line-fill orange" style="width:96%"></span></span><span class="line-value">8,4</span></div>
+                <div class="bar-line" data-season="2024"><span class="line-label">Sul</span><span class="line-track"><span class="line-fill orange" style="width:76%"></span></span><span class="line-value">7,1</span></div>
+                <div class="bar-line" data-season="2024"><span class="line-label">Centro-Oeste</span><span class="line-track"><span class="line-fill orange" style="width:58%"></span></span><span class="line-value">5,5</span></div>
+                <div class="bar-line" data-season="2023"><span class="line-label">Sudeste</span><span class="line-track"><span class="line-fill orange" style="width:90%"></span></span><span class="line-value">8,0</span></div>
+                <div class="bar-line" data-season="2023"><span class="line-label">Sul</span><span class="line-track"><span class="line-fill orange" style="width:77%"></span></span><span class="line-value">7,2</span></div>
+                <div class="bar-line" data-season="2023"><span class="line-label">Centro-Oeste</span><span class="line-track"><span class="line-fill orange" style="width:60%"></span></span><span class="line-value">5,6</span></div>
+                <div class="bar-line" data-season="2022"><span class="line-label">Sudeste</span><span class="line-track"><span class="line-fill orange" style="width:94%"></span></span><span class="line-value">8,3</span></div>
+                <div class="bar-line" data-season="2022"><span class="line-label">Sul</span><span class="line-track"><span class="line-fill orange" style="width:75%"></span></span><span class="line-value">7,0</span></div>
+                <div class="bar-line" data-season="2022"><span class="line-label">Centro-Oeste</span><span class="line-track"><span class="line-fill orange" style="width:57%"></span></span><span class="line-value">5,4</span></div>
+                <div class="bar-line" data-season="2021"><span class="line-label">Sudeste</span><span class="line-track"><span class="line-fill orange" style="width:91%"></span></span><span class="line-value">8,1</span></div>
+                <div class="bar-line" data-season="2021"><span class="line-label">Sul</span><span class="line-track"><span class="line-fill orange" style="width:74%"></span></span><span class="line-value">6,9</span></div>
+                <div class="bar-line" data-season="2021"><span class="line-label">Centro-Oeste</span><span class="line-track"><span class="line-fill orange" style="width:56%"></span></span><span class="line-value">5,3</span></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="analysis-group">
+          <div class="section-header">
+            <div>
+              <h2>Perfil dos clubes</h2>
+              <p>Consultas consolidadas, sem filtro de temporada.</p>
+            </div>
+          </div>
+          <div class="two-col-layout">
+            <article class="panel">
+              <div class="panel-header"><h3>07 · Clubes cadastrados por estado</h3></div>
+              <div class="bar-chart">
+                <div class="bar-item"><span class="bar-label">SP</span><span class="bar" style="--size:100%"></span><span class="bar-value">18</span></div>
+                <div class="bar-item"><span class="bar-label">RJ</span><span class="bar" style="--size:76%"></span><span class="bar-value">13</span></div>
+                <div class="bar-item"><span class="bar-label">MG</span><span class="bar" style="--size:64%"></span><span class="bar-value">11</span></div>
+              </div>
+            </article>
+            <article class="panel">
+              <div class="panel-header"><h3>08 · Perfil histórico dos clubes</h3></div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Clube</th><th>Temporadas</th><th>Primeira</th><th>Última</th></tr></thead>
+                  <tbody>
+                    <tr><td>Palmeiras</td><td>62</td><td>1933</td><td>2024</td></tr>
+                    <tr><td>Flamengo</td><td>60</td><td>1934</td><td>2024</td></tr>
+                    <tr><td>Cruzeiro</td><td>54</td><td>1959</td><td>2024</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="analysis-group">
+          <div class="section-header">
+            <div>
+              <h2>Relação entre posição e saldo de gols</h2>
+              <p>Cada ponto representa uma campanha; o gráfico não implica causalidade.</p>
+            </div>
+          </div>
+          <article class="panel">
+            <div class="panel-header panel-heading-with-control">
+              <h3>10 · Posição final × saldo de gols</h3>
+              <label class="panel-control">Temporada
+                <select data-filter="q10">
+                  <option value="all">Todas as temporadas</option><option value="2024">2024</option><option value="2023">2023</option><option value="2022">2022</option><option value="2021">2021</option>
+                </select>
+              </label>
+            </div>
+            <div class="scatter" role="img" aria-label="Gráfico demonstrativo de posição final e saldo de gols">
+              <div class="scatter-grid"><span></span><span></span><span></span><span></span><span></span></div>
+              <span class="scatter-point" data-season="2024" style="left:14%;top:58%" title="Campanha 2024"></span>
+              <span class="scatter-point" data-season="2023" style="left:22%;top:46%" title="Campanha 2023"></span>
+              <span class="scatter-point" data-season="2022" style="left:42%;top:34%" title="Campanha 2022"></span>
+              <span class="scatter-point" data-season="2021" style="left:60%;top:22%" title="Campanha 2021"></span>
+              <span class="scatter-point" data-season="2024" style="left:82%;top:18%" title="Outra campanha 2024"></span>
+              <span class="axis-label axis-x">Saldo de gols</span>
+              <span class="axis-label axis-y">Posição final</span>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+    <script src="dashboard.js"></script>
+  </body>
+</html>
