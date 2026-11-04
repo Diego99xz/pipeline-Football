@@ -167,7 +167,7 @@ Football/
 ├── test/                        # Testes pytest
 ├── app.py                       # Interface Streamlit
 ├── dashboard.css                # Estilo do protótipo HTML
-├── dashboard.html              # Protótipo visual estático
+├── index.html                   # Protótipo visual estático para GitHub Pages
 ├── dashboard.js                # Filtros demonstrativos do protótipo
 ├── mkdocs.yml                   # Configuração da documentação
 ├── painel.py                    # Leitura Gold, formatação e gráficos
@@ -177,9 +177,11 @@ Football/
 ```
 
 `football.duckdb` é um arquivo de banco local ignorado pelo Git, criado e
-preenchido pelo pipeline. O dashboard HTML/CSS/JS é um protótipo estático:
-seus filtros e dados são demonstrativos, não leem o DuckDB e não substituem o
-app Streamlit.
+preenchido pelo pipeline. A página está disponível no
+[GitHub Pages](https://diego99xz.github.io/pipeline-Football/) e é servida a
+partir de `index.html`: trata-se de uma demonstração estática com dados de
+amostra somente para visualização. Os filtros são interativos, mas o site não
+lê o DuckDB, não atualiza os dados e não substitui o app Streamlit.
 
 Não existe `main.py`: as etapas do pipeline são pontos de entrada
 independentes executados com `python -m`.

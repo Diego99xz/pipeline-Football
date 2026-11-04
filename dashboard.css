@@ -338,7 +338,24 @@ tbody tr:last-child td {
 
 .line-plot {
   position: absolute;
-  inset: 18px 24px 24px 26px;
+  inset: 18px 24px 48px 26px;
+}
+
+.chart-years {
+  position: absolute;
+  right: 24px;
+  bottom: 25px;
+  left: 42px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.chart-years span {
+  white-space: nowrap;
 }
 
 .line-plot svg {
@@ -452,33 +469,134 @@ tbody tr:last-child td {
 
 .scatter {
   position: relative;
-  height: 280px;
+  min-height: 390px;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: #ffffff;
   overflow: hidden;
 }
 
-.scatter-grid {
+.scatter-axis-title {
   position: absolute;
-  inset: 20px 18px 18px 18px;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(5, 1fr);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
 }
 
-.scatter-grid span {
-  border-right: 1px solid rgba(226, 232, 240, 0.9);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+.scatter .axis-y {
+  left: 16px;
+  top: 34%;
+  transform: translate(-50%, -50%) rotate(-90deg);
+  white-space: nowrap;
+}
+
+.scatter .axis-x {
+  right: 24px;
+  bottom: 142px;
+  left: 70px;
+  text-align: center;
+}
+
+.scatter-plot {
+  position: absolute;
+  inset: 22px 24px 205px 70px;
+}
+
+.scatter-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, transparent calc(100% - 1px), rgba(226, 232, 240, 0.9) 0),
+    linear-gradient(to bottom, transparent calc(100% - 1px), rgba(226, 232, 240, 0.9) 0);
+  background-size: 25% 25%;
+  background-repeat: repeat;
 }
 
 .scatter-point {
   position: absolute;
-  width: 12px;
-  height: 12px;
+  display: grid;
+  width: 22px;
+  height: 22px;
+  place-items: center;
   border-radius: 50%;
   background: var(--blue);
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.scatter-y-ticks {
+  position: absolute;
+  top: 22px;
+  bottom: 205px;
+  left: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 0.68rem;
+  line-height: 1;
+  transform: translateY(-0.35em);
+}
+
+.scatter-x-ticks {
+  position: absolute;
+  right: 24px;
+  bottom: 166px;
+  left: 70px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 0.68rem;
+  line-height: 1;
+}
+
+.scatter-legend {
+  position: absolute;
+  right: 20px;
+  bottom: 35px;
+  left: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 8px 16px;
+  color: var(--ink);
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.scatter-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.scatter-legend-number {
+  display: inline-grid;
+  width: 19px;
+  height: 19px;
+  flex: 0 0 19px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--blue);
+  color: #ffffff;
+  font-size: 0.66rem;
+  font-weight: 700;
+}
+
+.scatter-note {
+  position: absolute;
+  right: 20px;
+  bottom: 8px;
+  left: 20px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.68rem;
+  line-height: 1.2;
 }
 
 .p1 { left: 14%; top: 58%; }
@@ -570,5 +688,49 @@ button:focus-visible {
 
   .chart-years {
     font-size: 0.65rem;
+  }
+
+  .scatter {
+    min-height: 460px;
+  }
+
+  .scatter-plot {
+    right: 16px;
+    bottom: 280px;
+    left: 62px;
+  }
+
+  .scatter-y-ticks {
+    bottom: 280px;
+    left: 40px;
+  }
+
+  .scatter .axis-x,
+  .scatter-x-ticks {
+    right: 16px;
+    left: 62px;
+  }
+
+  .scatter .axis-x {
+    bottom: 217px;
+  }
+
+  .scatter-x-ticks {
+    bottom: 241px;
+  }
+
+  .scatter-legend {
+    right: 12px;
+    bottom: 36px;
+    left: 12px;
+    grid-template-columns: 1fr;
+    gap: 5px;
+    font-size: 0.72rem;
+  }
+
+  .scatter-note {
+    right: 12px;
+    left: 12px;
+    font-size: 0.64rem;
   }
 }

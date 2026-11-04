@@ -18,7 +18,7 @@
         <button type="button" class="refresh-btn" id="refresh-demo">Restaurar visualização</button>
       </header>
 
-      <p class="demo-notice">Visualização HTML demonstrativa. Os filtros são interativos, mas os dados não são carregados do DuckDB.</p>
+      <p class="demo-notice">Demonstração estática com dados de amostra apenas para visualização. Os filtros são interativos, mas os dados não são carregados do DuckDB.</p>
 
       <main class="dashboard">
         <section class="metrics-grid" aria-label="Indicadores principais">
@@ -294,15 +294,31 @@
                 </select>
               </label>
             </div>
-            <div class="scatter" role="img" aria-label="Gráfico demonstrativo de posição final e saldo de gols">
-              <div class="scatter-grid"><span></span><span></span><span></span><span></span><span></span></div>
-              <span class="scatter-point" data-season="2024" style="left:14%;top:58%" title="Campanha 2024"></span>
-              <span class="scatter-point" data-season="2023" style="left:22%;top:46%" title="Campanha 2023"></span>
-              <span class="scatter-point" data-season="2022" style="left:42%;top:34%" title="Campanha 2022"></span>
-              <span class="scatter-point" data-season="2021" style="left:60%;top:22%" title="Campanha 2021"></span>
-              <span class="scatter-point" data-season="2024" style="left:82%;top:18%" title="Outra campanha 2024"></span>
-              <span class="axis-label axis-x">Saldo de gols</span>
-              <span class="axis-label axis-y">Posição final</span>
+            <div class="scatter" role="group" aria-label="Gráfico de amostra relacionando saldo de gols no eixo horizontal e posição final no eixo vertical. Cada ponto numerado corresponde a um time na legenda.">
+              <span class="scatter-axis-title axis-y">Posição final (1º = melhor)</span>
+              <div class="scatter-y-ticks" aria-hidden="true">
+                <span>1º</span><span>5º</span><span>10º</span><span>15º</span><span>20º</span>
+              </div>
+              <div class="scatter-plot" aria-hidden="true">
+                <div class="scatter-grid"></div>
+                <span class="scatter-point" data-season="2024" style="left:62.5%;top:3%" title="Botafogo · 2024 · 1º lugar · saldo +30">1</span>
+                <span class="scatter-point" data-season="2024" style="left:41.25%;top:16%" title="Fortaleza · 2024 · 4º lugar · saldo +13">2</span>
+                <span class="scatter-point" data-season="2022" style="left:73.75%;top:21%" title="Flamengo · 2022 · 5º lugar · saldo +39">3</span>
+                <span class="scatter-point" data-season="2023" style="left:30%;top:32%" title="Fluminense · 2023 · 7º lugar · saldo +4">4</span>
+                <span class="scatter-point" data-season="2021" style="left:41.25%;top:26%" title="Grêmio · 2021 · 6º lugar · saldo +13">5</span>
+              </div>
+              <div class="scatter-x-ticks" aria-hidden="true">
+                <span>−20</span><span>0</span><span>20</span><span>40</span><span>60</span>
+              </div>
+              <span class="scatter-axis-title axis-x">Saldo de gols (marcados − sofridos)</span>
+              <div class="scatter-legend" aria-label="Legenda dos times">
+                <span class="scatter-legend-item" data-season="2024"><span class="scatter-legend-number">1</span> Botafogo · 2024 · 1º · +30</span>
+                <span class="scatter-legend-item" data-season="2024"><span class="scatter-legend-number">2</span> Fortaleza · 2024 · 4º · +13</span>
+                <span class="scatter-legend-item" data-season="2022"><span class="scatter-legend-number">3</span> Flamengo · 2022 · 5º · +39</span>
+                <span class="scatter-legend-item" data-season="2023"><span class="scatter-legend-number">4</span> Fluminense · 2023 · 7º · +4</span>
+                <span class="scatter-legend-item" data-season="2021"><span class="scatter-legend-number">5</span> Grêmio · 2021 · 6º · +13</span>
+              </div>
+              <p class="scatter-note">Exemplo estático para visualização; não representa dados conectados ao DuckDB.</p>
             </div>
           </article>
         </section>
