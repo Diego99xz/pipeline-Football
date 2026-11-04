@@ -199,4 +199,18 @@ pyrightconfig.json
 *.duckdb
 *.duckdb.wal
 
+# Local credentials and private keys
+.envrc
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+service-account*.json
+
+# Operating system metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode

@@ -1,0 +1,42 @@
+site_name: Football
+site_description: Documentação técnica do projeto de análise histórica do Campeonato Brasileiro.
+docs_dir: docs
+site_dir: site
+repo_name: Diego99xz/pipeline-Football
+repo_url: https://github.com/Diego99xz/pipeline-Football
+edit_uri: ""
+
+nav:
+  - Início: index.md
+  - Arquitetura: arquitetura.md
+  - Instalação e execução: instalacao.md
+  - Pipeline:
+      - Ingestão Bronze: pipeline/ingestao.md
+      - Transformação Silver: pipeline/transformacao.md
+      - Materialização Gold: pipeline/gold.md
+  - Camadas de dados:
+      - Bronze: dados/bronze.md
+      - Silver: dados/silver.md
+      - Gold: dados/gold.md
+  - Consultas analíticas: consultas.md
+  - Dashboard: dashboard.md
+  - Testes: testes.md
+  - Qualidade e desenvolvimento: desenvolvimento.md
+  - Referências: referencias.md
+
+theme:
+  name: mkdocs
+  locale: pt_BR
+  color_mode: light
+  user_color_mode_toggle: true
+  hljs_languages:
+    - python
+    - sql
+    - bash
+    - toml
+
+markdown_extensions:
+  - tables
+  - fenced_code
+  - toc:
+      permalink: true
